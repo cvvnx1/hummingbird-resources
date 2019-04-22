@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
+plugins {
+    id 'io.codearte.nexus-staging' version '0.11.0'
+}
+
+apply plugin: 'com.bmuschko.nexus'
+apply plugin:'java'
+
+group = 'com.ganwhat.hummingbird'
+version = '0.0.1'
+
+modifyPom {
+    project {
+        name 'hummingbird-resources'
+        description 'Resources for hummingbird'
+        url 'https://github.com/cvvnx1/hummingbird-resources'
+        inceptionYear '2019'
+        scm {
+            url 'https://github.com/cvvnx1/hummingbird-resources'
+            connection 'scm:https://github.com/cvvnx1/hummingbird-resources.git'
+            developerConnection 'scm:https://github.com/cvvnx1/hummingbird-resources.git'
+        }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'cvvnx1'
+                name 'Tony He'
+                email 'cvvnx1@hotmail.com'
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.projectlombok:lombok:1.18.+'
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+}
