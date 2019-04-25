@@ -9,5 +9,6 @@ import lombok.Data;
 public class Bird {
 
     private int id;
+    private int life;
 
 }
