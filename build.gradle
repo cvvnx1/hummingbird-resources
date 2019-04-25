@@ -22,6 +22,7 @@ version = '0.0.1'
 
 modifyPom {
     project {
+        artifactId 'hummingbird-resources'
         name 'hummingbird-resources'
         description 'Resources for hummingbird'
         url 'https://github.com/cvvnx1/hummingbird-resources'
