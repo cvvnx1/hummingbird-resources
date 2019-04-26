@@ -16,12 +16,12 @@ apply plugin: 'java'
 
 group = 'com.ganwhat.hummingbird'
 archivesBaseName = 'hummingbird-resources'
-version = '0.0.2'
+version = '0.0.3'
 
 modifyPom {
     project {
-        artifactId 'hummingbird-resources'
-        name 'hummingbird-resources'
+        artifactId "${gradle.rootProject.archivesBaseName}"
+        name "${gradle.rootProject.archivesBaseName}"
         description 'Resources for hummingbird'
         url 'https://github.com/cvvnx1/hummingbird-resources'
         inceptionYear '2019'
@@ -44,6 +44,20 @@ modifyPom {
                 email 'cvvnx1@hotmail.com'
             }
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Manifest-Group': "${gradle.rootProject.group}",
+                'Manifest-Artifact': "${gradle.rootProject.archivesBaseName}",
+                'Manifest-Version': "${gradle.rootProject.version}",
+                'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                'Built-By': 'cvvnx1@hotmail.com',
+                'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                'Created-By': "Gradle ${gradle.gradleVersion}"
+        )
     }
 }
 
