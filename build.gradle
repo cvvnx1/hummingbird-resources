@@ -65,8 +65,22 @@ repositories {
     mavenCentral()
 }
 
+test {
+    useJUnitPlatform()
+}
+
+ext {
+    lombok = 'org.projectlombok:lombok:1.18.8'
+}
+
 dependencies {
-    compile 'org.projectlombok:lombok:1.18.6'
+    compileOnly lombok
+    annotationProcessor lombok
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+
+    compile 'org.mousio:etcd4j:2.17.0'
 }
 
 extraArchive {
