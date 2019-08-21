@@ -1,5 +1,6 @@
 package com.ganwhat.hummingbird.resources.etcd;
 
+import lombok.Setter;
 import mousio.client.retry.RetryOnce;
 import mousio.etcd4j.EtcdClient;
 import mousio.etcd4j.responses.EtcdAuthenticationException;
@@ -20,7 +21,8 @@ import java.util.concurrent.TimeoutException;
 public class EtcdUtil {
     private EtcdClient client;
 
-    private final int ttl = 60;
+    @Setter
+    private int ttl = 60;
 
     // 这里就是发布的节点
     private String etcdKey = "hummingbird/";
@@ -48,29 +50,24 @@ public class EtcdUtil {
         client.setRetryHandler(new RetryOnce(20));
     }
 
-    public void regist() {
-        try {
-            client.put(etcdKey, "lock").ttl(ttl).send().get();
-            // 加上这个get()用来保证设置完成，走下一步，get会阻塞，由上面client的retry策略决定阻塞的方式
+    public void lock() throws Exception {
+        client.put(etcdKey, "lock").ttl(ttl).send().get();
+        // 加上这个get()用来保证设置完成，走下一步，get会阻塞，由上面client的retry策略决定阻塞的方式
 
-            // 启动一个守护线程来定时刷新节点
-            new Thread(new GuardEtcd()).start();
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("etcd Server not available.");
-        }
+        // 启动一个守护线程来定时刷新节点
+        new Thread(new GuardEtcd()).start();
     }
 
-    public boolean haveLock() {
+    public boolean haveLocked() {
         try {
-           return "lock".equals(client.get(etcdKey).send().get().getNode().getValue());
+            return "lock".equals(client.get(etcdKey).send().get().getNode().getValue());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public void destory() {
+    public void unlock() {
         try {
             client.delete(etcdKey).send().get();
             client.close();

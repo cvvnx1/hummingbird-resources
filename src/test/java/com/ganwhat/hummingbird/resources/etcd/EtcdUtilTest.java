@@ -18,9 +18,9 @@ public class EtcdUtilTest {
     }
 
     @Test
-    public void testLock() {
-        etcdUtil.regist();
-        Assertions.assertTrue(etcdUtil.haveLock());
-        etcdUtil.destory();
+    public void testLock() throws Exception {
+        etcdUtil.lock();
+        Assertions.assertTrue(etcdUtil.haveLocked());
+        etcdUtil.unlock();
     }
 }
