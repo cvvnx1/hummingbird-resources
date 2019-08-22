@@ -43,6 +43,10 @@ modifyPom {
                 name 'Tony He'
                 email 'cvvnx1@hotmail.com'
             }
+            developer {
+                id 'qq523407234'
+                name 'Yaodong Liu'
+            }
         }
     }
 }
