@@ -1,5 +1,9 @@
 buildscript {
     repositories {
+        maven {
+            name 'glide-snapshot'
+            url 'http://oss.sonatype.org/content/repositories/snapshots'
+        }
         jcenter()
     }
     dependencies {
@@ -81,6 +85,7 @@ dependencies {
     compileOnly lombok
     annotationProcessor lombok
 
+    implementation 'com.ganwhat.hummingbird:hummingbird-resources:0.0.5-SNAPSHOT'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
 
