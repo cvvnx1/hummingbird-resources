@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 /**
- * ...
- *
- * @Auther: yaodongliu
- * @Date: 2019/8/19 23:00
+ * @author : yaodongliu
  */
 public class EtcdUtil {
     private EtcdClient client;
