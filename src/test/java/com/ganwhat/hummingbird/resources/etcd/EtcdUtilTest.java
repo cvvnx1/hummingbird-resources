@@ -10,17 +10,17 @@ import org.junit.jupiter.api.Test;
  */
 public class EtcdUtilTest {
 
-    private static EtcdUtil etcdUtil;
+    private static EtcdLock etcdLock;
 
     @BeforeEach
     public void setEtcd() {
-        etcdUtil = new EtcdUtil(EtcdUtilTest.class, "http://localhost:4001");
+        etcdLock = new EtcdLockImpl(EtcdUtilTest.class, "http://localhost:4001");
     }
 
     @Test
     public void testLock() throws Exception {
-        etcdUtil.lock();
-        Assertions.assertTrue(etcdUtil.haveLocked());
-        etcdUtil.unlock();
+        etcdLock.lock();
+        Assertions.assertTrue(etcdLock.haveLocked());
+        etcdLock.unlock();
     }
 }
