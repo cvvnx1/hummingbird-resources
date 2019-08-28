@@ -1,5 +1,6 @@
 package com.ganwhat.hummingbird.resources.etcd;
 
+import com.ganwhat.hummingbird.resources.etcd.impl.EtcdLockImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

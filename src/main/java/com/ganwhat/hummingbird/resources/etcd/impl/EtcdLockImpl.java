@@ -1,5 +1,8 @@
-package com.ganwhat.hummingbird.resources.etcd;
+package com.ganwhat.hummingbird.resources.etcd.impl;
 
+import com.ganwhat.hummingbird.resources.etcd.EtcdLock;
+import com.ganwhat.hummingbird.resources.etcd.EtcdUtil;
+import com.ganwhat.hummingbird.resources.etcd.exception.EtcdLockException;
 import mousio.etcd4j.responses.EtcdAuthenticationException;
 import mousio.etcd4j.responses.EtcdException;
 
@@ -26,10 +29,17 @@ public class EtcdLockImpl implements EtcdLock {
     }
 
     @Override
+    public void tryLock() throws Exception {
+        if (!haveLocked()) {
+            lock();
+        } else {
+            throw new EtcdLockException();
+        }
+    }
+
+    @Override
     public void lock() throws Exception {
         etcdUtil.putNode(etcdKey, "lock");
-        // 加上这个get()用来保证设置完成，走下一步，get会阻塞，由上面client的retry策略决定阻塞的方式
-
         // 启动一个守护线程来定时刷新节点
         new Thread(new EtcdLockImpl.GuardEtcd()).start();
     }

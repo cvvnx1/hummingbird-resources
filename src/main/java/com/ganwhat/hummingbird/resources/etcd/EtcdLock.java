@@ -6,6 +6,8 @@ package com.ganwhat.hummingbird.resources.etcd;
  */
 public interface EtcdLock {
 
+    void tryLock() throws Exception;
+
     void lock() throws Exception;
 
     boolean haveLocked();
