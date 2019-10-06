@@ -20,6 +20,7 @@ public class EtcdUtilTest {
 
     @Test
     public void testLock() throws Exception {
+        etcdLock.setEtcdKey(etcdLock.getEtcdKey() + "/" + Thread.currentThread() .getStackTrace()[1].getMethodName());
         etcdLock.lock();
         Assertions.assertTrue(etcdLock.haveLocked());
         etcdLock.unlock();

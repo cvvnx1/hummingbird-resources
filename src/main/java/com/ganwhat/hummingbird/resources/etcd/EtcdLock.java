@@ -6,6 +6,10 @@ package com.ganwhat.hummingbird.resources.etcd;
  */
 public interface EtcdLock {
 
+    String getEtcdKey();
+
+    void setEtcdKey(String etcdKey);
+
     void tryLock() throws Exception;
 
     void lock() throws Exception;

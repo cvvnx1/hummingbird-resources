@@ -19,7 +19,16 @@ public class EtcdLockImpl implements EtcdLock {
 
     private int ttl = 20;
 
-    // 这里就是发布的节点
+    @Override
+    public String getEtcdKey() {
+        return etcdKey;
+    }
+
+    @Override
+    public void setEtcdKey(String etcdKey) {
+        this.etcdKey = etcdKey;
+    }
+
     private String etcdKey;
 
     public EtcdLockImpl(Class<?> clazz, String... peerUrls) {
@@ -40,7 +49,7 @@ public class EtcdLockImpl implements EtcdLock {
     @Override
     public void lock() throws Exception {
         etcdUtil.putNode(etcdKey, "lock");
-        // 启动一个守护线程来定时刷新节点
+        // Daemon thread
         new Thread(new EtcdLockImpl.GuardEtcd()).start();
     }
 
@@ -68,7 +77,6 @@ public class EtcdLockImpl implements EtcdLock {
         public void run() {
             while (true) {
                 try {
-                    // ttl的0.8倍
                     Thread.sleep(ttl * 800L);
 
                     etcdUtil.refreshNode(etcdKey);
