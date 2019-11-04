@@ -21,73 +21,51 @@ public class EtcdUtil {
     @Setter
     private int ttl = 60;
 
-    // 这里就是发布的节点
-    private String etcdKey = "hummingbird/";
-
     public EtcdUtil() {
-        // 节点数
+
         int nodeCount = 3;
 
-        // 添加集群节点
+        // add node
         URI[] uris = new URI[nodeCount];
         for (int i = 0; i < nodeCount; i++) {
             String urlString = "etcdHost" + i;
             uris[i] = URI.create(urlString);
         }
         client = new EtcdClient(uris);
-        // retry策略
+        // retry strategy
         client.setRetryHandler(new RetryOnce(20));
     }
 
-    public EtcdUtil(Class<?> clazz, String... peerUrls) {
-        etcdKey = etcdKey + clazz.getName();
+    public EtcdUtil(String... peerUrls) {
         List<String> peerUrlList = Arrays.asList(peerUrls);
         client = new EtcdClient(peerUrlList.stream().map(URI::create).toArray(URI[]::new));
-        // retry策略
+        // retry strategy
         client.setRetryHandler(new RetryOnce(20));
     }
 
-    public void lock() throws Exception {
-        client.put(etcdKey, "lock").ttl(ttl).send().get();
-        // 加上这个get()用来保证设置完成，走下一步，get会阻塞，由上面client的retry策略决定阻塞的方式
-
-        // 启动一个守护线程来定时刷新节点
-        new Thread(new GuardEtcd()).start();
+    public void putNode(String key, String value) throws IOException, EtcdAuthenticationException, TimeoutException, EtcdException {
+        putNode(key, value, ttl);
     }
 
-    public boolean haveLocked() {
-        try {
-            return "lock".equals(client.get(etcdKey).send().get().getNode().getValue());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void putNode(String key, String value, int ttl) throws IOException, EtcdAuthenticationException, TimeoutException, EtcdException {
+        client.put(key, value).ttl(ttl).send().get();
     }
 
-    public void unlock() {
-        try {
-            client.delete(etcdKey).send().get();
-            client.close();
-        } catch (IOException | EtcdException | EtcdAuthenticationException | TimeoutException e) {
-            e.printStackTrace();
-        }
+    public void refreshNode(String key) throws IOException {
+        refreshNode(key, ttl);
     }
 
-    private class GuardEtcd implements Runnable {
-
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    // ttl的0.8倍
-                    Thread.sleep(ttl * 800L);
-
-                    client.refresh(etcdKey, ttl).send();
-                    System.out.println("心跳");
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void refreshNode(String key, int ttl) throws IOException {
+        client.refresh(key, ttl).send();
     }
+
+    public String getNodeValue(String key) throws IOException, EtcdAuthenticationException, TimeoutException, EtcdException {
+        return client.get(key).send().get().getNode().getValue();
+    }
+
+    public void removeNode(String key) throws IOException, EtcdAuthenticationException, TimeoutException, EtcdException {
+        client.delete(key).send().get();
+        client.close();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ganwhat.hummingbird.resources.etcd;
 
+import com.ganwhat.hummingbird.resources.etcd.impl.EtcdLockImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,17 +11,18 @@ import org.junit.jupiter.api.Test;
  */
 public class EtcdUtilTest {
 
-    private static EtcdUtil etcdUtil;
+    private static EtcdLock etcdLock;
 
     @BeforeEach
     public void setEtcd() {
-        etcdUtil = new EtcdUtil(EtcdUtilTest.class, "http://localhost:4001");
+        etcdLock = new EtcdLockImpl(EtcdUtilTest.class, "http://localhost:4001");
     }
 
     @Test
     public void testLock() throws Exception {
-        etcdUtil.lock();
-        Assertions.assertTrue(etcdUtil.haveLocked());
-        etcdUtil.unlock();
+        etcdLock.setEtcdKey(etcdLock.getEtcdKey() + "/" + Thread.currentThread() .getStackTrace()[1].getMethodName());
+        etcdLock.lock();
+        Assertions.assertTrue(etcdLock.haveLocked());
+        etcdLock.unlock();
     }
 }
