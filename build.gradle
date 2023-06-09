@@ -2,7 +2,7 @@ buildscript {
     repositories {
         maven {
             name 'glide-snapshot'
-            url 'http://oss.sonatype.org/content/repositories/snapshots'
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         jcenter()
     }
@@ -20,7 +20,7 @@ apply plugin: 'java'
 
 group = 'com.ganwhat.hummingbird'
 archivesBaseName = 'hummingbird-resources'
-version = '0.0.5-SNAPSHOT'
+version = '0.0.5'
 
 modifyPom {
     project {
@@ -57,15 +57,13 @@ modifyPom {
 
 jar {
     manifest {
-        attributes(
-                'Manifest-Group': "${gradle.rootProject.group}",
+        attributes('Manifest-Group': "${gradle.rootProject.group}",
                 'Manifest-Artifact': "${gradle.rootProject.archivesBaseName}",
                 'Manifest-Version': "${gradle.rootProject.version}",
                 'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
                 'Built-By': 'cvvnx1@hotmail.com',
                 'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
-                'Created-By': "Gradle ${gradle.gradleVersion}"
-        )
+                'Created-By': "Gradle ${gradle.gradleVersion}")
     }
 }
 
@@ -81,13 +79,21 @@ ext {
     lombok = 'org.projectlombok:lombok:1.18.8'
 }
 
+List drools = ['org.kie:kie-ci:7.72.0.Final',
+               'org.drools:drools-decisiontables:7.72.0.Final']
+List junit = ['org.junit.jupiter:junit-jupiter-engine:5.8.2']
+List jackson = ['com.fasterxml.jackson.core:jackson-databind:2.13.1',
+                'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.1',
+                'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.1',
+                'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1']
+
 dependencies {
+    implementation drools, jackson
     compileOnly lombok
     annotationProcessor lombok
 
-    implementation 'com.ganwhat.hummingbird:hummingbird-resources:0.0.5-SNAPSHOT'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    implementation 'com.ganwhat.hummingbird:hummingbird-resources:0.0.5'
+    testImplementation junit
 
     compile 'org.mousio:etcd4j:2.17.0'
 }

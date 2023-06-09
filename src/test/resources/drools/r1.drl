@@ -1,0 +1,14 @@
+package com.ganwhat.toolkits.drools;
+
+global java.util.Map o;
+global com.ganwhat.hummingbird.resources.data.GreedyWrapBean i;
+global java.util.Map c;
+
+dialect "mvel"
+
+rule "r1" when
+then
+  o.put("a", "a");
+  o.put("hello", i.get("world").value(""));
+end
+

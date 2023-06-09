@@ -6,8 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * @Auther: yaodongliu
- * @Date: 2019/8/19 23:00
+ * @author : yaodongliu
  */
 public class EtcdUtilTest {
 

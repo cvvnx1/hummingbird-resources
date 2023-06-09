@@ -11,7 +11,6 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * @author : yaodongliu
- * @date : 2019/8/25
  */
 public class EtcdLockImpl implements EtcdLock {
 
