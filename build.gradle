@@ -20,7 +20,7 @@ apply plugin: 'java'
 
 group = 'com.ganwhat.hummingbird'
 archivesBaseName = 'hummingbird-resources'
-version = '0.0.5'
+version = '0.0.7'
 
 modifyPom {
     project {
@@ -37,7 +37,7 @@ modifyPom {
         licenses {
             license {
                 name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                 distribution 'repo'
             }
         }
@@ -92,7 +92,7 @@ dependencies {
     compileOnly lombok
     annotationProcessor lombok
 
-    implementation 'com.ganwhat.hummingbird:hummingbird-resources:0.0.5'
+    implementation "com.ganwhat.hummingbird:hummingbird-resources:${gradle.rootProject.version}"
     testImplementation junit
 
     compile 'org.mousio:etcd4j:2.17.0'

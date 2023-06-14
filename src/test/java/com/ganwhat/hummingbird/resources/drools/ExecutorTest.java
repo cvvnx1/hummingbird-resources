@@ -1,6 +1,5 @@
 package com.ganwhat.hummingbird.resources.drools;
 
-import com.ganwhat.hummingbird.resources.utils.JsonUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,9 +21,11 @@ public class ExecutorTest {
         String rule = content("drools/r1.drl");
         _Hello h = new _Hello();
         h.setWorld("hello world!");
-        Map<String, String> out = Executor.exec(rule, h, new HashMap<>());
-        Assertions.assertEquals("a", out.get("a"));
-        Assertions.assertEquals("hello world!", out.get("hello"));
+        Map<String, String> out = new HashMap<>();
+        out = Executor.exec(rule, h, new HashMap<>(), out);
+        Assertions.assertEquals("hello world!", out.get("world"));
+        Assertions.assertEquals("hello world!", out.get("getWorld()"));
+        Assertions.assertNull(out.get("break"));
     }
 
     private String content(String path) throws IOException {
